@@ -4,14 +4,11 @@
   nixpkgs.crossSystem = lib.systems.elaborate lib.systems.examples.raspberryPi;
 
   imports = [
-    <nixpkgs/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix>
+    <nixpkgs/nixos/modules/profiles/base.nix>
+    <nixpkgs/nixos/modules/installer/sd-card/sd-image.nix>
+    ./rpi-zero-w.nix
     ./minification.nix
     ./wifi.nix
-  ];
-
-  # prevent `modprobe: FATAL: Module ahci not found`
-  boot.initrd.availableKernelModules = pkgs.lib.mkForce [
-    "mmc_block"
   ];
 
   environment.systemPackages = with pkgs; [
@@ -24,21 +21,21 @@
     bottom
     (python39.withPackages(ps: with ps;[
       adafruit-pureio
+      pyserial
     ]))
-  ];
-
-  # needed for wlan0 to work (https://github.com/NixOS/nixpkgs/issues/115652)
-  hardware.enableRedistributableFirmware = pkgs.lib.mkForce false;
-  hardware.firmware = with pkgs; [
-    raspberrypiWirelessFirmware
   ];
 
   networking.wireless.enable = true;
 
-  services.openssh = {
-    enable = true;
-    passwordAuthentication = true;
+  boot = {
+    loader.raspberryPi.firmwareConfig = ''
+      dtparam=i2c=on
+    '';
+    kernelModules = [
+      "i2c-dev"
+    ];
   };
+  hardware.i2c.enable = true;
 
   users = {
     extraGroups = {
@@ -51,6 +48,11 @@
     };
   };
   services.getty.autologinUser = "pi";
+
+  services.openssh = {
+    enable = true;
+    passwordAuthentication = true;
+  };
 
   services.udev = {
     extraRules = ''

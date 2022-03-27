@@ -1,9 +1,5 @@
 # [NixOS](https://nixos.org/) on the [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/)
 
-| :warning: WARNING |
-|:------------------|
-| This is a work in progress. As of now the i2c doesn't work yet. |
-
 ## Configuration
 Copy the files from the `template` directory to the root of the repository and edit to your requirements.
 
@@ -22,5 +18,5 @@ zstd -dcf result/sd-image/*.img.zst | sudo dd status=progress bs=64k iflag=fullb
 ```
 
 ## Attribution
-- inspired by [illegalprime/nixos-on-arm](https://github.com/illegalprime/nixos-on-arm)
-- big thanks to @sternenseemann for helping me with cross compilation
+- inspired by [**illegalprime**/nixos-on-arm](https://github.com/illegalprime/nixos-on-arm)
+- big thanks to **sternenseemann** for helping me with cross compilation
