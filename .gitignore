@@ -1,0 +1,5 @@
+# nix-build output
+/result
+
+# secrets
+/wifi.nix
